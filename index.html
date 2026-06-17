@@ -62,16 +62,6 @@
   .contact-link:hover { box-shadow: var(--bevel), 0 0 0 2px var(--ac) !important; }
   .resume-btn:hover { transform:translateY(-2px); }
 
-  /* ── ASCII photo ─────────────────────────────────────────────────────── */
-  .ascii-photo { position:relative; flex-shrink:0; width:clamp(150px,30%,210px); border:2px solid rgba(0,0,0,0.8); box-shadow:var(--bevel),0 0 0 2px var(--ac-soft); background:#000; cursor:crosshair; overflow:hidden; }
-  .ascii-photo .ascii-wrap { position:relative; aspect-ratio:3/4; overflow:hidden; }
-  .ascii-photo pre { position:absolute; inset:0; margin:0; padding:0; font-family:'VT323',monospace; letter-spacing:0; color:var(--ac); white-space:pre; overflow:hidden; pointer-events:none; transition:opacity 0.4s steps(8); z-index:2; }
-  .ascii-photo .real-img { position:absolute; inset:0; clip-path:inset(100% 0 0 0); transition:clip-path 0.55s steps(14); z-index:3; }
-  .ascii-photo .real-img img { width:100%; height:100%; object-fit:cover; object-position:center 22%; filter:contrast(1.05) saturate(1.08); display:block; }
-  .ascii-photo .real-img .crt { position:absolute; inset:0; background:repeating-linear-gradient(0deg,rgba(0,0,0,0.18) 0 1px,transparent 1px 3px); pointer-events:none; }
-  .ascii-photo:hover pre { opacity:0; transition-delay:0.1s; }
-  .ascii-photo:hover .real-img { clip-path:inset(0% 0 0 0); }
-  .ascii-photo figcaption { font-family:'Press Start 2P',monospace; font-size:6px; color:var(--ac); letter-spacing:1px; text-align:center; padding:6px; background:var(--bg2); }
 </style>
 </head>
 <body>
@@ -151,16 +141,13 @@
           <div style="display:flex;gap:8px;align-items:baseline;font-size:18px;color:var(--dim);margin-bottom:18px;"><span style="color:var(--ac);white-space:nowrap;">harsh@soni ~ %</span><span style="color:var(--fg);">cat about.txt</span></div>
           <h2 style="font-family:'Press Start 2P',monospace;font-size:clamp(13px,2.6vw,18px);margin:0 0 22px;color:var(--fg);text-shadow:2px 2px 0 rgba(0,0,0,0.5);">ABOUT</h2>
           <div style="display:flex;gap:16px;flex-wrap:wrap;align-items:stretch;margin-bottom:14px;">
-            <div class="ascii-photo">
-              <div class="ascii-wrap">
-                <pre id="ascii-pre"></pre>
-                <div class="real-img">
-                  <img src="assets/harsh.jpeg" alt="Harsh Soni" />
-                  <div class="crt"></div>
-                </div>
+            <figure style="margin:0;flex-shrink:0;width:clamp(150px,30%,210px);border:2px solid rgba(0,0,0,0.8);box-shadow:var(--bevel),0 0 0 2px var(--ac-soft);background:var(--bg2);padding:7px;">
+              <div style="position:relative;aspect-ratio:3/4;overflow:hidden;background:#000;">
+                <img src="assets/harsh.jpeg" alt="Harsh Soni" style="width:100%;height:100%;object-fit:cover;object-position:center 22%;filter:contrast(1.05) saturate(1.08);" />
+                <div style="position:absolute;inset:0;pointer-events:none;background:repeating-linear-gradient(0deg,rgba(0,0,0,0.2) 0 1px,transparent 1px 3px);mix-blend-mode:multiply;"></div>
               </div>
-              <figcaption>PLAYER 01 · HARSH</figcaption>
-            </div>
+              <figcaption style="font-family:'Press Start 2P',monospace;font-size:7px;color:var(--ac);letter-spacing:1px;text-align:center;margin-top:8px;">PLAYER 01 · HARSH</figcaption>
+            </figure>
             <div style="border:2px solid rgba(0,0,0,0.7);box-shadow:var(--bevel);background:rgba(255,255,255,0.03);padding:20px 22px;flex:1;min-width:240px;">
               <p style="font-size:21px;color:var(--fg);line-height:1.45;margin:0 0 14px;opacity:0.92;">Mobile software engineer, 4 years deep in Flutter fintech. I care about the invisible craft — startup time, WebView speed, server-driven UI and multi-modular architecture — the stuff that makes an app feel right at the scale of millions.</p>
               <p style="font-size:21px;color:var(--dim);line-height:1.45;margin:0;">Today I'm founding mobile engineer at PowerUp Money, leading a small team. When I'm not shipping, I write on Medium and speak at Google Developer events about Flutter.</p>
@@ -604,76 +591,6 @@
       musicBtn.style.background = 'var(--ac-soft)';
     }
   };
-
-  // ── ASCII art photo ───────────────────────────────────────────────────────
-  (function() {
-    const pre = document.getElementById('ascii-pre');
-    const wrap = document.querySelector('.ascii-photo .ascii-wrap');
-    if (!pre || !wrap) return;
-
-    // Characters ordered light → dark so high luminance = sparse, low = dense
-    const CHARS = ' .,:;+*%#@';
-
-    function render(img) {
-      try {
-        // Measure the actual rendered container
-        const W = wrap.clientWidth  || 200;
-        const H = wrap.clientHeight || 267;
-
-        // Use 30 columns — gives readable detail without noise
-        const cols = 30;
-        // VT323 char cells are ~0.55× wide vs tall; derive font-size from that
-        const fontSize = W / cols / 0.55;
-        const lineH    = 1.0;
-        const rows      = Math.floor(H / (fontSize * lineH));
-
-        pre.style.fontSize   = fontSize + 'px';
-        pre.style.lineHeight = lineH;
-
-        // Sample the image using same crop as the <img> (center 22% offset)
-        const tmp = document.createElement('canvas');
-        tmp.width = cols; tmp.height = rows;
-        const ctx = tmp.getContext('2d');
-
-        // Replicate object-position: center 22% on a 3:4 crop
-        const srcAR = img.naturalWidth / img.naturalHeight;
-        const dstAR = 3 / 4;
-        let sx = 0, sy = 0, sw = img.naturalWidth, sh = img.naturalHeight;
-        if (srcAR > dstAR) {
-          sw = img.naturalHeight * dstAR;
-          sx = (img.naturalWidth - sw) / 2;
-        } else {
-          sh = img.naturalWidth / dstAR;
-          sy = img.naturalHeight * 0.22;
-        }
-        ctx.drawImage(img, sx, sy, sw, sh, 0, 0, cols, rows);
-
-        const px = ctx.getImageData(0, 0, cols, rows).data;
-        let out = '';
-        for (let y = 0; y < rows; y++) {
-          for (let x = 0; x < cols; x++) {
-            const i = (y * cols + x) * 4;
-            const lum = (0.299*px[i] + 0.587*px[i+1] + 0.114*px[i+2]) / 255;
-            out += CHARS[Math.min(CHARS.length - 1, Math.floor(lum * CHARS.length))];
-          }
-          out += '\n';
-        }
-        pre.textContent = out;
-      } catch(e) {
-        pre.style.display = 'none';
-        const ri = document.querySelector('.ascii-photo .real-img');
-        if (ri) ri.style.clipPath = 'none';
-      }
-    }
-
-    const img = new Image();
-    img.onload = () => {
-      // Wait for layout so clientWidth/Height are correct
-      if (wrap.clientWidth > 0) { render(img); }
-      else { requestAnimationFrame(() => render(img)); }
-    };
-    img.src = 'assets/harsh.jpeg';
-  })();
 
   // Click terminal to focus input (but not when clicking links)
   document.getElementById('terminal').addEventListener('click', (e) => {
