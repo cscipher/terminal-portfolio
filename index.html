@@ -1,0 +1,579 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Harsh Soni — Portfolio</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Press+Start+2P&family=VT323&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --bg: oklch(0.17 0.006 250);
+    --bg2: oklch(0.205 0.006 250);
+    --panel: oklch(0.235 0.006 250);
+    --line: oklch(1 0 0 / 0.10);
+    --fg: oklch(0.95 0.005 250);
+    --dim: oklch(0.7 0.012 250);
+    --faint: oklch(0.55 0.012 250);
+    --ac: oklch(0.78 0.18 50);
+    --ac-soft: color-mix(in oklch, var(--ac) 16%, transparent);
+    --ac-glow: 0 0 12px color-mix(in oklch, var(--ac) 50%, transparent);
+    --bevel: inset 2px 2px 0 rgba(255,255,255,0.10), inset -2px -2px 0 rgba(0,0,0,0.55);
+  }
+  * { box-sizing: border-box; }
+  html { image-rendering: pixelated; }
+  html, body {
+    height: 100%; margin: 0;
+    background: #0c0814;
+    color: var(--fg);
+    font-family: 'VT323', ui-monospace, monospace;
+    -webkit-font-smoothing: none;
+  }
+  ::selection { background: var(--ac-soft); }
+  ::-webkit-scrollbar { width: 10px; }
+  ::-webkit-scrollbar-thumb { background: rgba(255,255,255,0.18); border: 2px solid transparent; background-clip: padding-box; }
+  ::-webkit-scrollbar-track { background: transparent; }
+
+  @keyframes blink { 0%,49%{opacity:1} 50%,100%{opacity:0} }
+  @keyframes pulse { 0%,100%{opacity:1} 50%{opacity:0.3} }
+  @keyframes sunfloat { 0%,100%{transform:translate(-50%,-50%)} 50%{transform:translate(-50%,calc(-50% - 8px))} }
+  @keyframes gridscroll { from{background-position:0 0,0 0} to{background-position:0 72px,72px 0} }
+  @keyframes twinkle { 0%,100%{opacity:0.35} 50%{opacity:0.9} }
+  @keyframes twinkle2 { 0%,100%{opacity:0.8} 50%{opacity:0.25} }
+  @keyframes sunstripes { from{background-position:0 0} to{background-position:0 12px} }
+  @keyframes skybreath { 0%,100%{filter:brightness(1) saturate(1)} 50%{filter:brightness(1.12) saturate(1.15)} }
+  @keyframes gridglow { 0%,100%{opacity:0.42} 50%{opacity:0.7} }
+  @keyframes shoot { 0%{transform:translate(0,0) rotate(18deg);opacity:0} 4%{opacity:1} 13%{opacity:1} 20%{transform:translate(62vw,34vh) rotate(18deg);opacity:0} 100%{transform:translate(62vw,34vh) rotate(18deg);opacity:0} }
+  @keyframes viewOut { from{opacity:1;transform:translateY(0)} to{opacity:0;transform:translateY(12px)} }
+  @keyframes viewIn  { from{opacity:0;transform:translateY(12px)} to{opacity:1;transform:translateY(0)} }
+
+  #view-wrap { opacity:1; transform:none; }
+  #view-wrap.anim-out { animation: viewOut .16s steps(4) forwards; }
+  #view-wrap.anim-in  { animation: viewIn .28s steps(6) forwards; }
+
+  .section { display:none; }
+  .section.active { display:block; }
+
+  .cmd-link { text-decoration:none; transition:transform .1s steps(2); }
+  .cmd-link:hover { transform:translateY(-3px); }
+  .cmd-link:hover { box-shadow: var(--bevel), 0 0 0 2px var(--ac) !important; }
+  .contact-link:hover { box-shadow: var(--bevel), 0 0 0 2px var(--ac) !important; }
+  .resume-btn:hover { transform:translateY(-2px); }
+</style>
+</head>
+<body>
+
+<div style="position:fixed;inset:0;overflow:hidden;display:flex;align-items:center;justify-content:center;padding:clamp(10px,3vh,40px) clamp(10px,3vw,48px);">
+
+  <!-- WALLPAPER -->
+  <div style="position:absolute;inset:0;z-index:0;background:linear-gradient(180deg,#150d2e 0%,#2a1550 24%,#5a2061 46%,#ad3a5d 64%,#e26f4c 80%,#f4ab5b 100%);animation:skybreath 9s ease-in-out infinite;"></div>
+
+  <!-- Sun -->
+  <div style="position:absolute;left:50%;top:32%;width:min(46vw,360px);height:min(46vw,360px);transform:translate(-50%,-50%);z-index:0;animation:sunfloat 9s ease-in-out infinite;">
+    <div style="position:absolute;inset:0;border-radius:50%;background:radial-gradient(circle,#ffe79a 0%,#ffb24d 40%,#ff6f6e 68%,transparent 71%);"></div>
+    <div style="position:absolute;inset:0;background:repeating-linear-gradient(0deg,transparent 0 7px,rgba(10,6,18,0.78) 7px 11px);-webkit-mask:radial-gradient(circle,#000 47%,transparent 49%);mask:radial-gradient(circle,#000 47%,transparent 49%);animation:sunstripes 2.6s linear infinite;"></div>
+  </div>
+
+  <!-- Stars layer 1 -->
+  <div style="position:absolute;top:0;left:0;right:0;height:46%;z-index:0;pointer-events:none;background-image:radial-gradient(1.5px 1.5px at 12% 22%,#fff,transparent),radial-gradient(1px 1px at 28% 10%,rgba(255,255,255,0.8),transparent),radial-gradient(2px 2px at 42% 30%,#fff,transparent),radial-gradient(1px 1px at 58% 14%,rgba(255,255,255,0.7),transparent),radial-gradient(1.5px 1.5px at 73% 26%,#fff,transparent),radial-gradient(1px 1px at 86% 9%,rgba(255,255,255,0.8),transparent),radial-gradient(1px 1px at 92% 33%,#fff,transparent),radial-gradient(1.5px 1.5px at 5% 38%,rgba(255,255,255,0.7),transparent);animation:twinkle 3.4s ease-in-out infinite;"></div>
+
+  <!-- Stars layer 2 -->
+  <div style="position:absolute;top:0;left:0;right:0;height:44%;z-index:0;pointer-events:none;background-image:radial-gradient(1px 1px at 18% 14%,#fff,transparent),radial-gradient(1.5px 1.5px at 35% 24%,rgba(255,255,255,0.7),transparent),radial-gradient(1px 1px at 50% 8%,#fff,transparent),radial-gradient(1px 1px at 66% 30%,rgba(255,255,255,0.8),transparent),radial-gradient(1.5px 1.5px at 80% 18%,#fff,transparent),radial-gradient(1px 1px at 95% 12%,rgba(255,255,255,0.7),transparent),radial-gradient(1px 1px at 8% 9%,#fff,transparent);animation:twinkle2 2.3s ease-in-out infinite;"></div>
+
+  <!-- Shooting star 1 -->
+  <div style="position:absolute;top:6%;left:-12%;width:140px;height:2px;z-index:0;pointer-events:none;background:linear-gradient(90deg,transparent,#fff);box-shadow:0 0 6px #fff;animation:shoot 7s ease-in 1.5s infinite;"></div>
+
+  <!-- Shooting star 2 -->
+  <div style="position:absolute;top:2%;left:-12%;width:100px;height:2px;z-index:0;pointer-events:none;background:linear-gradient(90deg,transparent,color-mix(in oklch,var(--ac) 70%,#fff));box-shadow:0 0 6px var(--ac);animation:shoot 11s ease-in 5s infinite;"></div>
+
+  <!-- Scrolling grid -->
+  <div style="position:absolute;left:-60%;right:-60%;bottom:0;height:42%;z-index:0;transform:perspective(280px) rotateX(74deg);transform-origin:bottom center;background-image:repeating-linear-gradient(90deg,rgba(255,120,190,0.6) 0 2px,transparent 2px 72px),repeating-linear-gradient(0deg,rgba(255,120,190,0.6) 0 2px,transparent 2px 72px);animation:gridscroll 1.5s linear infinite,gridglow 4s ease-in-out infinite;"></div>
+
+  <!-- Vignette -->
+  <div style="position:absolute;inset:0;z-index:0;background:radial-gradient(circle at 50% 40%,transparent 40%,rgba(8,4,16,0.55) 100%);"></div>
+
+  <!-- TERMINAL WINDOW -->
+  <div id="terminal" onclick="focusInput()" style="position:relative;z-index:1;width:min(940px,100%);height:min(760px,90vh);display:flex;flex-direction:column;background:rgba(16,19,24,0.74);backdrop-filter:blur(16px) saturate(1.15);-webkit-backdrop-filter:blur(16px) saturate(1.15);border:2px solid rgba(0,0,0,0.9);box-shadow:var(--bevel),0 0 0 2px rgba(120,255,205,0.12),0 30px 70px rgba(0,0,0,0.6);cursor:text;overflow:hidden;">
+
+    <!-- Title bar -->
+    <div style="flex-shrink:0;height:42px;display:flex;align-items:center;gap:14px;padding:0 14px;background:rgba(10,12,16,0.6);border-bottom:2px solid rgba(0,0,0,0.7);box-shadow:inset 0 1px 0 rgba(255,255,255,0.07);">
+      <div style="display:flex;gap:7px;">
+        <span style="width:13px;height:13px;background:var(--faint);box-shadow:var(--bevel);display:inline-block;"></span>
+        <span style="width:13px;height:13px;background:var(--faint);box-shadow:var(--bevel);display:inline-block;"></span>
+        <span style="width:13px;height:13px;background:var(--ac);box-shadow:var(--bevel),var(--ac-glow);display:inline-block;"></span>
+      </div>
+      <div style="flex:1;text-align:center;font-size:18px;color:var(--dim);letter-spacing:0.04em;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;">harsh@soni — ~/portfolio — zsh</div>
+      <div style="display:flex;align-items:center;gap:10px;font-size:18px;color:var(--dim);flex-shrink:0;">
+        <button id="music-btn" onclick="toggleMusic(event)" title="toggle music" style="display:flex;align-items:center;gap:6px;font-family:'Press Start 2P',monospace;font-size:8px;letter-spacing:1px;cursor:pointer;padding:6px 8px;background:transparent;color:var(--faint);border:2px solid rgba(0,0,0,0.8);box-shadow:var(--bevel);">♪ OFF</button>
+        <span style="width:8px;height:8px;background:var(--ac);animation:pulse 2.4s infinite;display:inline-block;"></span>
+        <span id="clock" style="font-variant-numeric:tabular-nums;letter-spacing:0.04em;"></span>
+      </div>
+    </div>
+
+    <!-- Scanlines -->
+    <div style="position:absolute;inset:0;z-index:5;pointer-events:none;background:repeating-linear-gradient(0deg,rgba(0,0,0,0.16) 0 1px,transparent 1px 3px);opacity:0.5;"></div>
+
+    <!-- Content area -->
+    <div id="scroller" style="position:relative;flex:1;overflow-y:auto;padding:26px 26px 8px;">
+      <div id="view-wrap">
+
+        <!-- BOOT -->
+        <div id="sec-boot" class="section active">
+          <pre id="boot-text" style="margin:0;font-family:'VT323',monospace;font-size:18px;line-height:1.45;color:var(--dim);white-space:pre-wrap;word-break:break-word;"></pre><span style="display:inline-block;width:9px;height:16px;background:var(--ac);margin-left:3px;vertical-align:-3px;animation:blink 1.1s step-end infinite;"></span>
+        </div>
+
+        <!-- HERO -->
+        <div id="sec-hero" class="section">
+          <div style="display:flex;gap:8px;align-items:baseline;font-size:18px;color:var(--dim);margin-bottom:20px;"><span style="color:var(--ac);white-space:nowrap;">harsh@soni ~ %</span><span style="color:var(--fg);">whoami</span></div>
+          <div style="display:inline-flex;align-items:center;gap:8px;font-family:'Press Start 2P',monospace;font-size:9px;color:var(--ac);letter-spacing:1px;padding:7px 10px;background:var(--ac-soft);box-shadow:var(--bevel);margin-bottom:22px;"><span style="width:7px;height:7px;background:var(--ac);animation:pulse 2s infinite;display:inline-block;"></span>ONLINE · PLAYER 01</div>
+          <h1 style="font-family:'Press Start 2P',monospace;font-size:clamp(22px,5.4vw,46px);line-height:1.25;letter-spacing:1px;margin:0;color:var(--fg);text-shadow:3px 3px 0 rgba(0,0,0,0.5);">HARSH<br>SONI<span style="color:var(--ac);text-shadow:var(--ac-glow);">_</span></h1>
+          <div style="font-family:'Press Start 2P',monospace;font-size:clamp(9px,1.5vw,12px);color:var(--ac);letter-spacing:1px;margin-top:24px;">MOBILE SOFTWARE ENGINEER</div>
+          <div style="font-size:21px;color:var(--dim);margin-top:12px;letter-spacing:0.03em;">FLUTTER <span style="color:var(--faint);">·</span> iOS <span style="color:var(--faint);">·</span> ANDROID <span style="color:var(--faint);">·</span> BENGALURU</div>
+          <p style="max-width:54ch;color:var(--fg);font-size:21px;line-height:1.45;margin:24px 0 0;opacity:0.92;">I build &amp; scale Flutter fintech apps used by millions — chasing buttery performance, server-driven UI, and clean architecture. Published author &amp; Google Developer event speaker.</p>
+          <div style="margin-top:28px;font-size:20px;color:var(--faint);"><span style="color:var(--ac);">▶</span> type <span style="color:var(--ac);">about</span>, <span style="color:var(--ac);">experience</span>, <span style="color:var(--ac);">writing</span> or <span style="color:var(--ac);">help</span></div>
+        </div>
+
+        <!-- ABOUT -->
+        <div id="sec-about" class="section">
+          <div style="display:flex;gap:8px;align-items:baseline;font-size:18px;color:var(--dim);margin-bottom:18px;"><span style="color:var(--ac);white-space:nowrap;">harsh@soni ~ %</span><span style="color:var(--fg);">cat about.txt</span></div>
+          <h2 style="font-family:'Press Start 2P',monospace;font-size:clamp(13px,2.6vw,18px);margin:0 0 22px;color:var(--fg);text-shadow:2px 2px 0 rgba(0,0,0,0.5);">ABOUT</h2>
+          <div style="display:flex;gap:16px;flex-wrap:wrap;align-items:stretch;margin-bottom:14px;">
+            <figure style="margin:0;flex-shrink:0;width:clamp(150px,30%,210px);border:2px solid rgba(0,0,0,0.8);box-shadow:var(--bevel),0 0 0 2px var(--ac-soft);background:var(--bg2);padding:7px;">
+              <div style="position:relative;aspect-ratio:3/4;overflow:hidden;background:#000;">
+                <img src="assets/harsh.jpeg" alt="Harsh Soni" style="width:100%;height:100%;object-fit:cover;object-position:center 22%;filter:contrast(1.05) saturate(1.08);" />
+                <div style="position:absolute;inset:0;pointer-events:none;background:repeating-linear-gradient(0deg,rgba(0,0,0,0.2) 0 1px,transparent 1px 3px);mix-blend-mode:multiply;"></div>
+              </div>
+              <figcaption style="font-family:'Press Start 2P',monospace;font-size:7px;color:var(--ac);letter-spacing:1px;text-align:center;margin-top:8px;">PLAYER 01 · HARSH</figcaption>
+            </figure>
+            <div style="border:2px solid rgba(0,0,0,0.7);box-shadow:var(--bevel);background:rgba(255,255,255,0.03);padding:20px 22px;flex:1;min-width:240px;">
+              <p style="font-size:21px;color:var(--fg);line-height:1.45;margin:0 0 14px;opacity:0.92;">Mobile software engineer, 4 years deep in Flutter fintech. I care about the invisible craft — startup time, WebView speed, server-driven UI and multi-modular architecture — the stuff that makes an app feel right at the scale of millions.</p>
+              <p style="font-size:21px;color:var(--dim);line-height:1.45;margin:0;">Today I'm founding mobile engineer at PowerUp Money, leading a small team. When I'm not shipping, I write on Medium and speak at Google Developer events about Flutter.</p>
+            </div>
+          </div>
+          <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:12px;margin-top:14px;">
+            <div style="border:2px solid rgba(0,0,0,0.7);box-shadow:var(--bevel);background:var(--bg2);padding:16px 18px;">
+              <div style="font-family:'Press Start 2P',monospace;font-size:8px;color:var(--ac);letter-spacing:1px;margin-bottom:11px;">EDUCATION</div>
+              <div style="font-size:20px;color:var(--fg);">B.Tech, Computer Science</div>
+              <div style="font-size:18px;color:var(--dim);margin-top:3px;">GITS, Udaipur · 2019–2023</div>
+              <div style="font-size:18px;color:var(--dim);">GPA <span style="color:var(--ac);">9.4 / 10.0</span></div>
+            </div>
+            <div style="border:2px solid rgba(0,0,0,0.7);box-shadow:var(--bevel);background:var(--bg2);padding:16px 18px;">
+              <div style="font-family:'Press Start 2P',monospace;font-size:8px;color:var(--ac);letter-spacing:1px;margin-bottom:11px;">CURRENTLY</div>
+              <div style="font-size:20px;color:var(--fg);">Founding Mobile Engineer</div>
+              <div style="font-size:18px;color:var(--dim);margin-top:3px;">PowerUp Money · team of 4</div>
+              <div style="font-size:18px;color:var(--dim);">Mutual fund advisory app</div>
+            </div>
+            <div style="border:2px solid rgba(0,0,0,0.7);box-shadow:var(--bevel);background:var(--bg2);padding:16px 18px;">
+              <div style="font-family:'Press Start 2P',monospace;font-size:8px;color:var(--ac);letter-spacing:1px;margin-bottom:11px;">EXTRAS</div>
+              <div style="font-size:20px;color:var(--fg);">6 publications</div>
+              <div style="font-size:18px;color:var(--dim);margin-top:3px;">3 conference talks</div>
+              <div style="font-size:18px;color:var(--dim);">Medium · IEEE · GDG</div>
+            </div>
+          </div>
+        </div>
+
+        <!-- EXPERIENCE -->
+        <div id="sec-experience" class="section">
+          <div style="display:flex;gap:8px;align-items:baseline;font-size:18px;color:var(--dim);margin-bottom:18px;"><span style="color:var(--ac);white-space:nowrap;">harsh@soni ~ %</span><span style="color:var(--fg);">git log --experience</span></div>
+          <h2 style="font-family:'Press Start 2P',monospace;font-size:clamp(13px,2.6vw,18px);margin:0 0 24px;color:var(--fg);text-shadow:2px 2px 0 rgba(0,0,0,0.5);">EXPERIENCE</h2>
+          <div style="display:flex;flex-direction:column;gap:14px;">
+            <div style="border:2px solid rgba(0,0,0,0.7);box-shadow:var(--bevel);background:var(--bg2);padding:18px 20px;border-left:5px solid var(--ac);">
+              <div style="display:flex;flex-wrap:wrap;align-items:center;gap:10px;"><span style="font-family:'Press Start 2P',monospace;font-size:12px;color:var(--fg);">PowerUp Money</span><span style="font-family:'Press Start 2P',monospace;font-size:7px;color:var(--ac);background:var(--ac-soft);padding:4px 7px;box-shadow:var(--bevel);">NOW</span></div>
+              <div style="font-size:18px;color:var(--dim);margin-top:8px;">SDE II · Jun 2025 – Present · Bengaluru</div>
+              <ul style="margin:12px 0 0;padding:0;list-style:none;display:flex;flex-direction:column;gap:6px;">
+                <li style="font-size:19px;color:var(--dim);line-height:1.35;padding-left:18px;position:relative;"><span style="position:absolute;left:0;color:var(--ac);">›</span>Founding Mobile Engineer leading a team of 4 to ship a mutual-fund advisory app on Flutter.</li>
+                <li style="font-size:19px;color:var(--dim);line-height:1.35;padding-left:18px;position:relative;"><span style="position:absolute;left:0;color:var(--ac);">›</span>Grew to <span style="color:var(--fg);">500K+ Android</span> &amp; <span style="color:var(--fg);">50K+ iOS</span> installs at a <span style="color:var(--fg);">99.16%</span> crash-free rate.</li>
+                <li style="font-size:19px;color:var(--dim);line-height:1.35;padding-left:18px;position:relative;"><span style="position:absolute;left:0;color:var(--ac);">›</span>Built in-house server-driven UI; cut startup time for a ~2× faster perceived experience.</li>
+              </ul>
+            </div>
+            <div style="border:2px solid rgba(0,0,0,0.7);box-shadow:var(--bevel);background:var(--bg2);padding:18px 20px;border-left:5px solid rgba(255,255,255,0.2);">
+              <span style="font-family:'Press Start 2P',monospace;font-size:12px;color:var(--fg);">Uni Cards</span>
+              <div style="font-size:18px;color:var(--dim);margin-top:8px;">SDE I &amp; II · Sep 2023 – May 2025 · Bengaluru</div>
+              <ul style="margin:12px 0 0;padding:0;list-style:none;display:flex;flex-direction:column;gap:6px;">
+                <li style="font-size:19px;color:var(--dim);line-height:1.35;padding-left:18px;position:relative;"><span style="position:absolute;left:0;color:var(--ac);">›</span>Built credit cards, P2P lending &amp; personal loans, maintaining <span style="color:var(--fg);">10M+ users</span>.</li>
+                <li style="font-size:19px;color:var(--dim);line-height:1.35;padding-left:18px;position:relative;"><span style="position:absolute;left:0;color:var(--ac);">›</span>Led the Financial Freedom features that became the PowerUp product.</li>
+                <li style="font-size:19px;color:var(--dim);line-height:1.35;padding-left:18px;position:relative;"><span style="position:absolute;left:0;color:var(--ac);">›</span>Evaluated mono-repo vs. submodules, refined state management, cut redundant API calls.</li>
+              </ul>
+            </div>
+            <div style="border:2px solid rgba(0,0,0,0.7);box-shadow:var(--bevel);background:var(--bg2);padding:18px 20px;border-left:5px solid rgba(255,255,255,0.2);">
+              <span style="font-family:'Press Start 2P',monospace;font-size:12px;color:var(--fg);">Tickertape</span>
+              <div style="font-size:18px;color:var(--dim);margin-top:8px;">SDE I, Mobile · Smallcase · Nov 2022 – Sep 2023 · Remote</div>
+              <ul style="margin:12px 0 0;padding:0;list-style:none;display:flex;flex-direction:column;gap:6px;">
+                <li style="font-size:19px;color:var(--dim);line-height:1.35;padding-left:18px;position:relative;"><span style="position:absolute;left:0;color:var(--ac);">›</span>Built TT Social (social investing) &amp; TT Learn (financial education) from scratch.</li>
+                <li style="font-size:19px;color:var(--dim);line-height:1.35;padding-left:18px;position:relative;"><span style="position:absolute;left:0;color:var(--ac);">›</span>Shipped iOS Dynamic Island &amp; Live Activities, watchlists &amp; a redesigned onboarding flow.</li>
+              </ul>
+            </div>
+          </div>
+        </div>
+
+        <!-- SKILLS -->
+        <div id="sec-skills" class="section">
+          <div style="display:flex;gap:8px;align-items:baseline;font-size:18px;color:var(--dim);margin-bottom:18px;"><span style="color:var(--ac);white-space:nowrap;">harsh@soni ~ %</span><span style="color:var(--fg);">cat stack.json</span></div>
+          <h2 style="font-family:'Press Start 2P',monospace;font-size:clamp(13px,2.6vw,18px);margin:0 0 24px;color:var(--fg);text-shadow:2px 2px 0 rgba(0,0,0,0.5);">STACK</h2>
+          <div style="display:flex;flex-direction:column;gap:22px;">
+            <div>
+              <div style="font-family:'Press Start 2P',monospace;font-size:8px;color:var(--ac);letter-spacing:1px;margin-bottom:13px;">LANGUAGES</div>
+              <div style="display:flex;flex-wrap:wrap;gap:9px;">
+                <span style="font-size:19px;color:var(--fg);padding:6px 13px;background:var(--bg2);box-shadow:var(--bevel);">Dart</span>
+                <span style="font-size:19px;color:var(--fg);padding:6px 13px;background:var(--bg2);box-shadow:var(--bevel);">Swift</span>
+                <span style="font-size:19px;color:var(--fg);padding:6px 13px;background:var(--bg2);box-shadow:var(--bevel);">Kotlin</span>
+                <span style="font-size:19px;color:var(--fg);padding:6px 13px;background:var(--bg2);box-shadow:var(--bevel);">Java</span>
+                <span style="font-size:19px;color:var(--fg);padding:6px 13px;background:var(--bg2);box-shadow:var(--bevel);">C++</span>
+                <span style="font-size:19px;color:var(--fg);padding:6px 13px;background:var(--bg2);box-shadow:var(--bevel);">Python</span>
+              </div>
+            </div>
+            <div>
+              <div style="font-family:'Press Start 2P',monospace;font-size:8px;color:var(--ac);letter-spacing:1px;margin-bottom:13px;">FRAMEWORKS &amp; TOOLS</div>
+              <div style="display:flex;flex-wrap:wrap;gap:9px;">
+                <span style="font-size:19px;color:var(--fg);padding:6px 13px;background:var(--bg2);box-shadow:var(--bevel);">Flutter</span>
+                <span style="font-size:19px;color:var(--fg);padding:6px 13px;background:var(--bg2);box-shadow:var(--bevel);">SwiftUI</span>
+                <span style="font-size:19px;color:var(--fg);padding:6px 13px;background:var(--bg2);box-shadow:var(--bevel);">Jetpack Compose</span>
+                <span style="font-size:19px;color:var(--fg);padding:6px 13px;background:var(--bg2);box-shadow:var(--bevel);">Firebase</span>
+                <span style="font-size:19px;color:var(--fg);padding:6px 13px;background:var(--bg2);box-shadow:var(--bevel);">Reactive Programming</span>
+              </div>
+            </div>
+            <div>
+              <div style="font-family:'Press Start 2P',monospace;font-size:8px;color:var(--ac);letter-spacing:1px;margin-bottom:13px;">FOCUS AREAS</div>
+              <div style="display:flex;flex-wrap:wrap;gap:9px;">
+                <span style="font-size:19px;color:var(--dim);padding:6px 13px;border:2px dashed rgba(255,255,255,0.22);">Performance</span>
+                <span style="font-size:19px;color:var(--dim);padding:6px 13px;border:2px dashed rgba(255,255,255,0.22);">Server-Driven UI</span>
+                <span style="font-size:19px;color:var(--dim);padding:6px 13px;border:2px dashed rgba(255,255,255,0.22);">State Management</span>
+                <span style="font-size:19px;color:var(--dim);padding:6px 13px;border:2px dashed rgba(255,255,255,0.22);">Multi-modular Arch</span>
+                <span style="font-size:19px;color:var(--dim);padding:6px 13px;border:2px dashed rgba(255,255,255,0.22);">App Store Deploy</span>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- WRITING -->
+        <div id="sec-writing" class="section">
+          <div style="display:flex;gap:8px;align-items:baseline;font-size:18px;color:var(--dim);margin-bottom:18px;"><span style="color:var(--ac);white-space:nowrap;">harsh@soni ~ %</span><span style="color:var(--fg);">open ~/writing</span></div>
+          <h2 style="font-family:'Press Start 2P',monospace;font-size:clamp(13px,2.6vw,18px);margin:0 0 22px;color:var(--fg);text-shadow:2px 2px 0 rgba(0,0,0,0.5);">WRITING</h2>
+          <div style="display:grid;grid-template-columns:repeat(auto-fill,minmax(250px,1fr));gap:12px;">
+            <a href="https://medium.com/search?q=Dynamic%20Island%20Live%20Activities%20Flutter%20Swift" target="_blank" class="cmd-link" style="text-decoration:none;border:2px solid rgba(0,0,0,0.7);box-shadow:var(--bevel);background:var(--bg2);padding:16px;display:flex;flex-direction:column;gap:10px;">
+              <div style="display:flex;justify-content:space-between;gap:8px;"><span style="font-family:'Press Start 2P',monospace;font-size:7px;color:var(--ac);letter-spacing:1px;">MEDIUM · JUN 23</span><span style="color:var(--ac);font-size:16px;">↗</span></div>
+              <div style="font-size:20px;color:var(--fg);line-height:1.25;">Dynamic Island &amp; Live Activities with Flutter &amp; Swift</div>
+            </a>
+            <a href="https://medium.com/search?q=Migrating%20Manual%20Riverpod%20Providers%20riverpod%20annotations%20Flutter" target="_blank" class="cmd-link" style="text-decoration:none;border:2px solid rgba(0,0,0,0.7);box-shadow:var(--bevel);background:var(--bg2);padding:16px;display:flex;flex-direction:column;gap:10px;">
+              <div style="display:flex;justify-content:space-between;gap:8px;"><span style="font-family:'Press Start 2P',monospace;font-size:7px;color:var(--ac);letter-spacing:1px;">MEDIUM · FEB 26</span><span style="color:var(--ac);font-size:16px;">↗</span></div>
+              <div style="font-size:20px;color:var(--fg);line-height:1.25;">Migrating Manual Riverpod Providers to @riverpod</div>
+            </a>
+            <a href="https://medium.com/search?q=Upgrading%20Rive%20Flutter%20native%20runtime" target="_blank" class="cmd-link" style="text-decoration:none;border:2px solid rgba(0,0,0,0.7);box-shadow:var(--bevel);background:var(--bg2);padding:16px;display:flex;flex-direction:column;gap:10px;">
+              <div style="display:flex;justify-content:space-between;gap:8px;"><span style="font-family:'Press Start 2P',monospace;font-size:7px;color:var(--ac);letter-spacing:1px;">MEDIUM · JAN 26</span><span style="color:var(--ac);font-size:16px;">↗</span></div>
+              <div style="font-size:20px;color:var(--fg);line-height:1.25;">Upgrading Rive in Flutter: The Native Runtime</div>
+            </a>
+            <a href="https://medium.com/search?q=Managing%20Configuration%20Signing%20iOS%20Apps" target="_blank" class="cmd-link" style="text-decoration:none;border:2px solid rgba(0,0,0,0.7);box-shadow:var(--bevel);background:var(--bg2);padding:16px;display:flex;flex-direction:column;gap:10px;">
+              <div style="display:flex;justify-content:space-between;gap:8px;"><span style="font-family:'Press Start 2P',monospace;font-size:7px;color:var(--ac);letter-spacing:1px;">MEDIUM · OCT 24</span><span style="color:var(--ac);font-size:16px;">↗</span></div>
+              <div style="font-size:20px;color:var(--fg);line-height:1.25;">Managing Configuration &amp; Signing on iOS Apps</div>
+            </a>
+            <a href="https://medium.com/search?q=Multi-Modular%20Architecture%20Git%20Submodules%20Flutter" target="_blank" class="cmd-link" style="text-decoration:none;border:2px solid rgba(0,0,0,0.7);box-shadow:var(--bevel);background:var(--bg2);padding:16px;display:flex;flex-direction:column;gap:10px;">
+              <div style="display:flex;justify-content:space-between;gap:8px;"><span style="font-family:'Press Start 2P',monospace;font-size:7px;color:var(--ac);letter-spacing:1px;">MEDIUM · NOV 23</span><span style="color:var(--ac);font-size:16px;">↗</span></div>
+              <div style="font-size:20px;color:var(--fg);line-height:1.25;">Multi-Modular Architecture with Git Submodules</div>
+            </a>
+            <a href="https://ieeexplore.ieee.org/search/searchresult.jsp?queryText=Self-Autonomous%20Car%20Simulation%20Deep%20Q-Learning" target="_blank" class="cmd-link" style="text-decoration:none;border:2px solid rgba(0,0,0,0.7);box-shadow:var(--bevel);background:var(--bg2);padding:16px;display:flex;flex-direction:column;gap:10px;">
+              <div style="display:flex;justify-content:space-between;gap:8px;"><span style="font-family:'Press Start 2P',monospace;font-size:7px;color:var(--ac);letter-spacing:1px;">IEEE · FEB 23</span><span style="color:var(--ac);font-size:16px;">↗</span></div>
+              <div style="font-size:20px;color:var(--fg);line-height:1.25;">Self-Autonomous Car Simulation via Deep Q-Learning</div>
+            </a>
+          </div>
+          <div style="font-family:'Press Start 2P',monospace;font-size:8px;color:var(--ac);letter-spacing:1px;margin:26px 0 14px;">SPEAKING</div>
+          <div style="display:flex;flex-direction:column;gap:8px;">
+            <div style="border:2px solid rgba(0,0,0,0.7);box-shadow:var(--bevel);background:rgba(255,255,255,0.03);padding:13px 16px;display:flex;flex-wrap:wrap;justify-content:space-between;gap:8px;"><span style="font-size:20px;color:var(--fg);">Flutter &amp; Firebase: A Symphony of Real-Time Dataflow</span><span style="font-size:17px;color:var(--dim);">DevFest23 · Dec 23</span></div>
+            <div style="border:2px solid rgba(0,0,0,0.7);box-shadow:var(--bevel);background:rgba(255,255,255,0.03);padding:13px 16px;display:flex;flex-wrap:wrap;justify-content:space-between;gap:8px;"><span style="font-size:20px;color:var(--fg);">Flutter Spotlight: Intro, Features &amp; What's Next!</span><span style="font-size:17px;color:var(--dim);">I/O Extended · Sep 23</span></div>
+            <div style="border:2px solid rgba(0,0,0,0.7);box-shadow:var(--bevel);background:rgba(255,255,255,0.03);padding:13px 16px;display:flex;flex-wrap:wrap;justify-content:space-between;gap:8px;"><span style="font-size:20px;color:var(--fg);">Intro to Hybrid App Development with Flutter</span><span style="font-size:17px;color:var(--dim);">GDG Udaipur · Apr 23</span></div>
+          </div>
+        </div>
+
+        <!-- CONTACT -->
+        <div id="sec-contact" class="section">
+          <div style="display:flex;gap:8px;align-items:baseline;font-size:18px;color:var(--dim);margin-bottom:18px;"><span style="color:var(--ac);white-space:nowrap;">harsh@soni ~ %</span><span style="color:var(--fg);">./contact.sh</span></div>
+          <h2 style="font-family:'Press Start 2P',monospace;font-size:clamp(13px,2.6vw,20px);line-height:1.3;margin:0 0 12px;color:var(--fg);text-shadow:2px 2px 0 rgba(0,0,0,0.5);">LET'S BUILD<br>SOMETHING</h2>
+          <p style="font-size:21px;color:var(--dim);margin:0 0 22px;max-width:46ch;line-height:1.4;">Open to interesting mobile problems &amp; conversations about Flutter, performance and fintech.</p>
+          <div style="display:flex;flex-direction:column;gap:9px;max-width:480px;">
+            <a href="mailto:harsh.here17@gmail.com" class="contact-link" style="text-decoration:none;display:flex;align-items:center;justify-content:space-between;gap:12px;border:2px solid rgba(0,0,0,0.7);box-shadow:var(--bevel);background:var(--bg2);padding:14px 16px;"><span style="font-family:'Press Start 2P',monospace;font-size:8px;color:var(--ac);letter-spacing:1px;">EMAIL</span><span style="font-size:20px;color:var(--fg);">harsh.here17@gmail.com</span></a>
+            <a href="https://linkedin.com/in/cscipher" target="_blank" class="contact-link" style="text-decoration:none;display:flex;align-items:center;justify-content:space-between;gap:12px;border:2px solid rgba(0,0,0,0.7);box-shadow:var(--bevel);background:var(--bg2);padding:14px 16px;"><span style="font-family:'Press Start 2P',monospace;font-size:8px;color:var(--ac);letter-spacing:1px;">LINKEDIN</span><span style="font-size:20px;color:var(--fg);">in/cscipher</span></a>
+            <a href="https://github.com/cscipher" target="_blank" class="contact-link" style="text-decoration:none;display:flex;align-items:center;justify-content:space-between;gap:12px;border:2px solid rgba(0,0,0,0.7);box-shadow:var(--bevel);background:var(--bg2);padding:14px 16px;"><span style="font-family:'Press Start 2P',monospace;font-size:8px;color:var(--ac);letter-spacing:1px;">GITHUB</span><span style="font-size:20px;color:var(--fg);">@cscipher</span></a>
+          </div>
+          <a href="assets/Harsh Soni - Resume.pdf" download="Harsh Soni - Resume.pdf" class="resume-btn" style="text-decoration:none;display:inline-flex;align-items:center;gap:12px;margin-top:18px;font-family:'Press Start 2P',monospace;font-size:10px;letter-spacing:1px;color:#0c0814;background:var(--ac);padding:15px 20px;border:2px solid rgba(0,0,0,0.85);box-shadow:var(--bevel),var(--ac-glow);"><span style="font-size:14px;">▼</span> DOWNLOAD RESUME</a>
+        </div>
+
+        <!-- HELP -->
+        <div id="sec-help" class="section">
+          <div style="display:flex;gap:8px;align-items:baseline;font-size:18px;color:var(--dim);margin-bottom:18px;"><span style="color:var(--ac);white-space:nowrap;">harsh@soni ~ %</span><span style="color:var(--fg);">help</span></div>
+          <h2 style="font-family:'Press Start 2P',monospace;font-size:clamp(13px,2.6vw,18px);margin:0 0 22px;color:var(--fg);text-shadow:2px 2px 0 rgba(0,0,0,0.5);">COMMANDS</h2>
+          <div style="display:flex;flex-direction:column;gap:11px;font-size:20px;">
+            <div style="display:flex;gap:14px;"><span style="color:var(--ac);min-width:130px;">whoami</span><span style="color:var(--dim);">intro screen</span></div>
+            <div style="display:flex;gap:14px;"><span style="color:var(--ac);min-width:130px;">about</span><span style="color:var(--dim);">bio &amp; education</span></div>
+            <div style="display:flex;gap:14px;"><span style="color:var(--ac);min-width:130px;">experience</span><span style="color:var(--dim);">work history</span></div>
+            <div style="display:flex;gap:14px;"><span style="color:var(--ac);min-width:130px;">skills</span><span style="color:var(--dim);">tech stack</span></div>
+            <div style="display:flex;gap:14px;"><span style="color:var(--ac);min-width:130px;">writing</span><span style="color:var(--dim);">articles &amp; talks</span></div>
+            <div style="display:flex;gap:14px;"><span style="color:var(--ac);min-width:130px;">contact</span><span style="color:var(--dim);">get in touch</span></div>
+            <div style="display:flex;gap:14px;"><span style="color:var(--ac);min-width:130px;">clear</span><span style="color:var(--dim);">back to start</span></div>
+          </div>
+          <div style="font-size:18px;color:var(--faint);margin-top:22px;">↑ / ↓ recall previous commands</div>
+        </div>
+
+      </div>
+    </div>
+
+    <!-- Prompt bar -->
+    <div style="flex-shrink:0;background:rgba(10,12,16,0.5);border-top:2px solid rgba(0,0,0,0.7);box-shadow:inset 0 1px 0 rgba(255,255,255,0.06);">
+      <div id="msg-bar" style="display:none;padding:10px 16px 0;font-size:18px;"></div>
+      <div style="display:flex;align-items:center;gap:10px;padding:13px 16px;">
+        <span style="color:var(--ac);font-size:19px;white-space:nowrap;">harsh@soni <span style="color:var(--dim);">~</span> %</span>
+        <div style="position:relative;flex:1;min-height:22px;">
+          <div id="display-input" style="font-size:20px;color:var(--fg);white-space:pre;line-height:22px;"> <span style="display:inline-block;width:9px;height:17px;background:var(--ac);margin-left:1px;vertical-align:-3px;animation:blink 1.1s step-end infinite;"></span></div>
+          <input id="cmd-input" spellcheck="false" autocomplete="off" autocapitalize="off" style="position:absolute;inset:0;width:100%;height:100%;background:transparent;border:none;outline:none;color:transparent;caret-color:transparent;font-family:'VT323',monospace;font-size:20px;" />
+        </div>
+      </div>
+    </div>
+
+  </div>
+</div>
+
+<script>
+(function() {
+  // ── DOM refs ──────────────────────────────────────────────────────────────
+  const clockEl    = document.getElementById('clock');
+  const bootText   = document.getElementById('boot-text');
+  const viewWrap   = document.getElementById('view-wrap');
+  const scroller   = document.getElementById('scroller');
+  const cmdInput   = document.getElementById('cmd-input');
+  const dispInput  = document.getElementById('display-input');
+  const msgBar     = document.getElementById('msg-bar');
+  const musicBtn   = document.getElementById('music-btn');
+
+  // ── Clock ─────────────────────────────────────────────────────────────────
+  function fmt(d) {
+    const p = n => String(n).padStart(2, '0');
+    return p(d.getHours()) + ':' + p(d.getMinutes()) + ':' + p(d.getSeconds());
+  }
+  function tickClock() { clockEl.textContent = fmt(new Date()); }
+  tickClock();
+  setInterval(tickClock, 1000);
+
+  // ── Section management ────────────────────────────────────────────────────
+  let active = 'boot';
+  let swTimer = null;
+
+  function showSection(id) {
+    document.querySelectorAll('.section').forEach(s => s.classList.remove('active'));
+    const el = document.getElementById('sec-' + id);
+    if (el) el.classList.add('active');
+    active = id;
+  }
+
+  function go(key) {
+    if (active === key) {
+      viewWrap.classList.remove('anim-out', 'anim-in');
+      void viewWrap.offsetWidth;
+      viewWrap.classList.add('anim-out');
+      clearTimeout(swTimer);
+      swTimer = setTimeout(() => {
+        viewWrap.classList.remove('anim-out');
+        void viewWrap.offsetWidth;
+        viewWrap.classList.add('anim-in');
+        setTimeout(() => viewWrap.classList.remove('anim-in'), 280);
+      }, 150);
+      return;
+    }
+    viewWrap.classList.remove('anim-out', 'anim-in');
+    void viewWrap.offsetWidth;
+    viewWrap.classList.add('anim-out');
+    clearTimeout(swTimer);
+    swTimer = setTimeout(() => {
+      showSection(key);
+      scroller.scrollTo({ top: 0 });
+      viewWrap.classList.remove('anim-out');
+      void viewWrap.offsetWidth;
+      viewWrap.classList.add('anim-in');
+      setTimeout(() => viewWrap.classList.remove('anim-in'), 280);
+    }, 170);
+  }
+
+  // ── Command map ───────────────────────────────────────────────────────────
+  const cmdMap = {
+    whoami:'hero', hero:'hero', intro:'hero', start:'hero',
+    about:'about', bio:'about',
+    experience:'experience', exp:'experience', work:'experience',
+    skills:'skills', stack:'skills', tech:'skills',
+    writing:'writing', blog:'writing', talks:'writing', publications:'writing', articles:'writing',
+    contact:'contact', email:'contact', hire:'contact',
+    help:'help', '?':'help', man:'help', ls:'help',
+    clear:'hero', cls:'hero', home:'hero', reset:'hero',
+  };
+
+  let history = [];
+  let histIdx = 0;
+  let booting = true;
+
+  function setMsg(text, isErr) {
+    if (!text) { msgBar.style.display = 'none'; return; }
+    msgBar.style.display = 'block';
+    msgBar.style.color = isErr ? 'oklch(0.72 0.16 30)' : 'var(--dim)';
+    msgBar.textContent = text;
+  }
+
+  function runCmd(raw) {
+    if (booting) return;
+    const c = (raw || '').trim().toLowerCase();
+    if (!c) return;
+    history.push(c);
+    histIdx = history.length;
+    setMsg('');
+    const key = cmdMap[c];
+    if (key) {
+      go(key);
+    } else {
+      go('help');
+      setMsg('zsh: command not found: ' + c + ' — try one of the commands below ↓', true);
+    }
+  }
+
+  // ── Input handling ────────────────────────────────────────────────────────
+  function updateDisplay(val) {
+    dispInput.innerHTML = (val || '') + '<span style="display:inline-block;width:9px;height:17px;background:var(--ac);margin-left:1px;vertical-align:-3px;animation:blink 1.1s step-end infinite;"></span>';
+  }
+
+  cmdInput.addEventListener('input', () => updateDisplay(cmdInput.value));
+
+  cmdInput.addEventListener('keydown', (e) => {
+    if (e.key === 'Enter') {
+      const v = cmdInput.value;
+      cmdInput.value = '';
+      updateDisplay('');
+      runCmd(v);
+    } else if (e.key === 'ArrowUp') {
+      e.preventDefault();
+      if (history.length && histIdx > 0) {
+        histIdx--;
+        cmdInput.value = history[histIdx];
+        updateDisplay(cmdInput.value);
+      }
+    } else if (e.key === 'ArrowDown') {
+      e.preventDefault();
+      if (histIdx < history.length - 1) {
+        histIdx++;
+        cmdInput.value = history[histIdx];
+        updateDisplay(cmdInput.value);
+      } else {
+        histIdx = history.length;
+        cmdInput.value = '';
+        updateDisplay('');
+      }
+    }
+  });
+
+  window.focusInput = function() { cmdInput.focus(); };
+
+  // ── Boot sequence ─────────────────────────────────────────────────────────
+  showSection('boot');
+
+  const now = new Date();
+  const dateStr = now.toLocaleDateString('en-US', { weekday:'short', month:'short', day:'numeric' }) + ' ' + fmt(now);
+  const bootLines = [
+    'Last login: ' + dateStr + ' on ttys001',
+    'harsh@soni ~ % ./portfolio --init',
+    'loading profile ............. ok',
+    'modules: flutter · swiftui · compose ............. ok',
+    'rendering 16-bit interface ............. ok',
+    'ready — type `help` to list commands',
+  ];
+  const fullBoot = bootLines.join('\n');
+
+  function finishBoot() {
+    booting = false;
+    localStorage.setItem('hs_boot_done', '1');
+    setTimeout(() => {
+      go('hero');
+      setTimeout(() => cmdInput.focus(), 300);
+    }, 450);
+  }
+
+  if (localStorage.getItem('hs_boot_done')) {
+    bootText.textContent = fullBoot;
+    booting = false;
+    go('hero');
+    setTimeout(() => cmdInput.focus(), 60);
+  } else {
+    let i = 0;
+    function step() {
+      i++;
+      bootText.textContent = fullBoot.slice(0, i);
+      if (i < fullBoot.length) {
+        setTimeout(step, fullBoot[i - 1] === '\n' ? 130 : 10);
+      } else {
+        finishBoot();
+      }
+    }
+    step();
+  }
+
+  // ── Audio (chiptune) ──────────────────────────────────────────────────────
+  let ac = null, master = null, seqStep = 0, seqInterval = null, musicOn = false;
+  const lead = [440,523.25,659.25,523.25, 587.33,523.25,440,0, 392,440,523.25,440, 329.63,392,440,0];
+  const bass = [110,0,110,0, 87.31,0,87.31,0, 130.81,0,130.81,0, 98,0,98,0];
+
+  function initAudio() {
+    if (ac) return;
+    const AC = window.AudioContext || window.webkitAudioContext;
+    ac = new AC();
+    master = ac.createGain();
+    master.gain.value = 0.15;
+    const lp = ac.createBiquadFilter();
+    lp.type = 'lowpass'; lp.frequency.value = 4200;
+    master.connect(lp); lp.connect(ac.destination);
+  }
+
+  function blip(freq, type, dur, gain) {
+    const t = ac.currentTime;
+    const o = ac.createOscillator();
+    const g = ac.createGain();
+    o.type = type; o.frequency.setValueAtTime(freq, t);
+    g.gain.setValueAtTime(0, t);
+    g.gain.linearRampToValueAtTime(gain, t + 0.012);
+    g.gain.exponentialRampToValueAtTime(0.0001, t + dur);
+    o.connect(g); g.connect(master);
+    o.start(t); o.stop(t + dur + 0.03);
+  }
+
+  function playStep() {
+    const i = seqStep % 16;
+    if (lead[i]) blip(lead[i], 'square', 0.14, 0.9);
+    if (bass[i]) blip(bass[i], 'triangle', 0.17, 0.7);
+    if (i % 4 === 0) blip(60, 'square', 0.05, 0.5);
+    seqStep++;
+  }
+
+  window.toggleMusic = function(e) {
+    e.stopPropagation();
+    initAudio();
+    if (musicOn) {
+      clearInterval(seqInterval); seqInterval = null;
+      if (ac.suspend) ac.suspend();
+      musicOn = false;
+      musicBtn.textContent = '♪ OFF';
+      musicBtn.style.color = 'var(--faint)';
+      musicBtn.style.background = 'transparent';
+    } else {
+      if (ac.resume) ac.resume();
+      seqStep = 0;
+      clearInterval(seqInterval);
+      seqInterval = setInterval(playStep, 152);
+      musicOn = true;
+      musicBtn.textContent = '♫ ON';
+      musicBtn.style.color = 'var(--ac)';
+      musicBtn.style.background = 'var(--ac-soft)';
+    }
+  };
+
+  // Click terminal to focus input (but not when clicking links)
+  document.getElementById('terminal').addEventListener('click', (e) => {
+    if (e.target.tagName !== 'A' && e.target.tagName !== 'BUTTON') {
+      cmdInput.focus();
+    }
+  });
+})();
+</script>
+</body>
+</html>
