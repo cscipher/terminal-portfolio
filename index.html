@@ -458,6 +458,7 @@
   cmdInput.addEventListener('input', () => updateDisplay(cmdInput.value));
 
   cmdInput.addEventListener('keydown', (e) => {
+    if (window._gameActive) { e.preventDefault(); return; }
     if (e.key === 'Enter') {
       const v = cmdInput.value;
       cmdInput.value = '';
@@ -604,16 +605,18 @@
     if (isActive && !_gameInst) {
       window._gameActive = true;
       cmdInput.blur();
+      cmdInput.disabled = true;
       _gameInst = new SpaceGame(
         document.getElementById('game-canvas'),
         document.getElementById('g-score'),
         document.getElementById('g-lives'),
         document.getElementById('g-level'),
-        () => { _gameInst = null; window._gameActive = false; runCmd('whoami'); }
+        () => { _gameInst = null; window._gameActive = false; cmdInput.disabled = false; runCmd('whoami'); }
       );
       _gameInst.start();
     } else if (!isActive && _gameInst) {
       _gameInst.stop(); _gameInst = null; window._gameActive = false;
+      cmdInput.disabled = false;
     }
   }).observe(gameSection, { attributes: true, attributeFilter: ['class'] });
 
