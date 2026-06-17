@@ -54,6 +54,7 @@
 
   .section { display:none; }
   .section.active { display:block; }
+  #sec-game.active { display:flex; }
 
   .cmd-link { text-decoration:none; transition:transform .1s steps(2); }
   .cmd-link:hover { transform:translateY(-3px); }
@@ -315,18 +316,20 @@
         </div>
 
         <!-- GAME -->
-        <div id="sec-game" class="section">
-          <div style="display:flex;gap:8px;align-items:baseline;font-size:18px;color:var(--dim);margin-bottom:14px;"><span style="color:var(--ac);white-space:nowrap;">harsh@soni ~ %</span><span style="color:var(--fg);">./invaders.exe</span></div>
-          <div style="display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:8px;margin-bottom:10px;">
-            <div style="font-family:'Press Start 2P',monospace;font-size:8px;color:var(--ac);letter-spacing:1px;">SPACE INVADERS</div>
-            <div style="font-size:18px;color:var(--dim);">ARROWS move · SPACE shoot · ESC quit</div>
+        <div id="sec-game" class="section" style="flex-direction:column;gap:0;padding:12px 14px;">
+          <div style="display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:6px;margin-bottom:8px;flex-shrink:0;">
+            <div style="display:flex;gap:8px;align-items:baseline;font-size:18px;color:var(--dim);"><span style="color:var(--ac);white-space:nowrap;">harsh@soni ~ %</span><span style="color:var(--fg);">./invaders.exe</span></div>
+            <div style="display:flex;align-items:center;gap:16px;">
+              <div style="font-family:'Press Start 2P',monospace;font-size:7px;color:var(--ac);letter-spacing:1px;">SPACE INVADERS</div>
+              <div style="font-size:17px;color:var(--faint);">ARROWS move · SPACE shoot · ESC quit</div>
+            </div>
           </div>
-          <div style="position:relative;display:inline-block;border:2px solid rgba(0,0,0,0.8);box-shadow:var(--bevel),0 0 0 2px var(--ac-soft);">
-            <canvas id="game-canvas" width="620" height="360" style="display:block;background:#050810;image-rendering:pixelated;max-width:100%;"></canvas>
+          <div id="game-wrap" style="flex:1;position:relative;min-height:0;border:2px solid rgba(0,0,0,0.8);box-shadow:var(--bevel),0 0 0 2px var(--ac-soft);">
+            <canvas id="game-canvas" style="display:block;width:100%;height:100%;background:#050810;image-rendering:pixelated;"></canvas>
             <div style="position:absolute;inset:0;pointer-events:none;background:repeating-linear-gradient(0deg,rgba(0,0,0,0.12) 0 1px,transparent 1px 3px);opacity:0.6;"></div>
           </div>
-          <div style="display:flex;gap:20px;margin-top:10px;font-size:19px;">
-            <span style="color:var(--dim);">SCORE <span id="g-score" style="color:var(--ac);">0</span></span>
+          <div style="display:flex;gap:20px;margin-top:8px;font-size:19px;flex-shrink:0;">
+            <span style="color:var(--dim);">SCORE <span id="g-score" style="color:var(--ac);">00000</span></span>
             <span style="color:var(--dim);">LIVES <span id="g-lives" style="color:var(--ac);">♥ ♥ ♥</span></span>
             <span style="color:var(--dim);">LEVEL <span id="g-level" style="color:var(--ac);">1</span></span>
           </div>
@@ -600,30 +603,53 @@
   let _gameInst = null;
   const gameSection = document.getElementById('sec-game');
 
-  new MutationObserver(() => {
-    const isActive = gameSection.classList.contains('active');
-    if (isActive && !_gameInst) {
-      window._gameActive = true;
-      cmdInput.blur();
-      cmdInput.disabled = true;
+  function gameStart() {
+    scroller.style.padding = '0';
+    scroller.style.overflowY = 'hidden';
+    gameSection.style.position = 'absolute';
+    gameSection.style.inset = '0';
+    gameSection.style.display = 'flex';
+    window._gameActive = true;
+    cmdInput.blur();
+    cmdInput.disabled = true;
+    // Brief delay so flex layout settles before SpaceGame measures the canvas
+    setTimeout(() => {
+      const canvas = document.getElementById('game-canvas');
       _gameInst = new SpaceGame(
-        document.getElementById('game-canvas'),
+        canvas,
         document.getElementById('g-score'),
         document.getElementById('g-lives'),
         document.getElementById('g-level'),
-        () => { _gameInst = null; window._gameActive = false; cmdInput.disabled = false; runCmd('whoami'); }
+        () => { _gameInst = null; gameStop(); runCmd('whoami'); }
       );
       _gameInst.start();
+    }, 50);
+  }
+
+  function gameStop() {
+    scroller.style.padding = '';
+    scroller.style.overflowY = '';
+    gameSection.style.position = '';
+    gameSection.style.inset = '';
+    gameSection.style.display = '';
+    window._gameActive = false;
+    cmdInput.disabled = false;
+  }
+
+  new MutationObserver(() => {
+    const isActive = gameSection.classList.contains('active');
+    if (isActive && !_gameInst) {
+      gameStart();
     } else if (!isActive && _gameInst) {
-      _gameInst.stop(); _gameInst = null; window._gameActive = false;
-      cmdInput.disabled = false;
+      _gameInst.stop(); _gameInst = null; gameStop();
     }
   }).observe(gameSection, { attributes: true, attributeFilter: ['class'] });
 
-  // Block terminal input keys when game is running
+  // Prevent browser scroll on game keys; don't stopImmediatePropagation so
+  // the game's own document listener still fires
   document.addEventListener('keydown', (e) => {
     if (window._gameActive && ['ArrowLeft','ArrowRight','ArrowUp','ArrowDown','Space'].includes(e.code)) {
-      e.stopImmediatePropagation();
+      e.preventDefault();
     }
   }, true);
 
@@ -743,9 +769,20 @@ class SpaceGame {
   start() {
     document.addEventListener('keydown', this._onKey);
     document.addEventListener('keyup', this._onKeyUp);
-    this.reset();
-    this.lastTime = performance.now();
-    this.loop(this.lastTime);
+    // Poll via rAF until the canvas has layout, then kick off
+    const tryStart = () => {
+      const w = this.canvas.offsetWidth, h = this.canvas.offsetHeight;
+      if (w > 0 && h > 0) {
+        this.canvas.width = w; this.canvas.height = h;
+        this.W = w; this.H = h;
+        this.reset();
+        this.lastTime = performance.now();
+        this.loop(this.lastTime);
+      } else {
+        this.raf = requestAnimationFrame(tryStart);
+      }
+    };
+    requestAnimationFrame(tryStart);
   }
 
   stop() {
